@@ -1,4 +1,4 @@
-FROM botpress/server:v12_26_5-linux-x64
+FROM botpress/server:latest
 
 ENV BP_PORT=3000
 
