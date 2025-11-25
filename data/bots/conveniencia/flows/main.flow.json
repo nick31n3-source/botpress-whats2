@@ -1,0 +1,184 @@
+{
+  "version": "12.26.5",
+  "startNode": "entry",
+  "nodes": [
+    {
+      "id": "entry",
+      "name": "Entrada",
+      "onEnter": [
+        "say #!builtin_text-Welcome"
+      ],
+      "onReceive": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "askOption"
+        }
+      ]
+    },
+    {
+      "id": "askOption",
+      "name": "Perguntar opção",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Olá! Bem-vindo à sua conveniência. Por favor, escolha uma opção:
+1) Ver Catálogo
+2) Fazer Pedido
+3) Perguntas Frequentes"
+        }
+      ],
+      "onReceive": [],
+      "next": [
+        {
+          "condition": "event.payload.text === '1'",
+          "node": "showCatalog"
+        },
+        {
+          "condition": "event.payload.text === '2'",
+          "node": "askProduct"
+        },
+        {
+          "condition": "event.payload.text === '3'",
+          "node": "showFAQ"
+        },
+        {
+          "condition": "true",
+          "node": "askOption"
+        }
+      ]
+    },
+    {
+      "id": "showCatalog",
+      "name": "Mostrar Catálogo",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Catálogo:
+- Cervejas: Heineken R$5, Skol R$4
+- Refrigerantes: Coca-Cola R$4, Guaraná R$3
+- Sucos: Suco de Laranja R$3"
+        }
+      ],
+      "onReceive": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "askOption"
+        }
+      ]
+    },
+    {
+      "id": "askProduct",
+      "name": "Perguntar Produto",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Qual produto deseja?"
+        }
+      ],
+      "onReceive": [
+        {
+          "type": "run_action",
+          "name": "saveProduct"
+        }
+      ],
+      "next": [
+        {
+          "condition": "true",
+          "node": "askQuantity"
+        }
+      ]
+    },
+    {
+      "id": "askQuantity",
+      "name": "Perguntar Quantidade",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Quantas unidades?"
+        }
+      ],
+      "onReceive": [
+        {
+          "type": "run_action",
+          "name": "saveQuantity"
+        }
+      ],
+      "next": [
+        {
+          "condition": "true",
+          "node": "confirmOrder"
+        }
+      ]
+    },
+    {
+      "id": "confirmOrder",
+      "name": "Confirmar Pedido",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Seu pedido é: {{state.quantity}}x {{state.product}}. Confirma? (Sim/Não)"
+        }
+      ],
+      "onReceive": [
+        {
+          "type": "run_action",
+          "name": "handleConfirmation"
+        }
+      ],
+      "next": [
+        {
+          "condition": "state.confirmed === true",
+          "node": "payment"
+        },
+        {
+          "condition": "state.confirmed === false",
+          "node": "askProduct"
+        },
+        {
+          "condition": "true",
+          "node": "confirmOrder"
+        }
+      ]
+    },
+    {
+      "id": "payment",
+      "name": "Pagamento",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Para confirmar seu pedido, acesse o link: https://pagseguro.uol.com.br/"
+        }
+      ],
+      "onReceive": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "askOption"
+        }
+      ]
+    },
+    {
+      "id": "showFAQ",
+      "name": "Perguntas Frequentes",
+      "onEnter": [
+        {
+          "type": "send_message",
+          "text": "Perguntas Frequentes:
+- Horário: 8h às 22h
+- Endereço: Rua Exemplo, 123
+- Formas de pagamento: cartão, Pix, dinheiro"
+        }
+      ],
+      "onReceive": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "askOption"
+        }
+      ]
+    }
+  ]
+}
+"Add main flow"
